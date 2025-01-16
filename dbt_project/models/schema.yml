@@ -1,0 +1,246 @@
+version: 2
+
+sources:
+  - name: public
+    tables:
+      - name: neighborhood_pov
+        description: "Poverty estimates for neighborhoods."
+      - name: public_school_characteristics
+        description: "Characteristics of public schools."
+      - name: private_school_locations
+        description: "Locations of private schools."
+      - name: public_school_locations
+        description: "Locations of public schools."
+      - name: school_district_characteristics
+        description: "Characteristics of school districts."
+      - name: school_district_boundaries
+        description: "Geographical boundaries of school districts."
+      - name: student_assessment_results
+        description: "Student assessment results."
+      - name: "district_assessment_results"
+        description: "District Assessment Results."
+      - name: district_funding
+        description: "Funding information for school districts."
+      - name: esser_cares
+        description: "ESSER Cares table."
+      - name: esser_crrsa
+        description: "ESSER CRRSA table."
+      - name: esser_arp
+        description: "ESSER ARP table."
+
+models:
+  - name: stg_neighborhood_pov
+    description: "Staging model for neighborhood poverty data."
+    columns:
+      - name: objectid
+        description: "Unique identifier for the record."
+        tests:
+          - not_null
+          - unique
+      - name: name
+        description: "Name of the school."
+        tests:
+          - not_null
+      # Add other columns and tests as needed
+
+  - name: stg_public_school_characteristics
+    description: "Staging model for public school characteristics."
+    columns:
+      - name: objectid
+        description: "Unique identifier for the record."
+        tests:
+          - not_null
+          - unique
+      - name: ncessch
+        description: "Unique School ID."
+        tests:
+          - not_null
+      # Add other columns and tests as needed
+
+  - name: stg_private_school_locations
+    description: "Staging model for private school locations."
+    columns:
+      - name: objectid
+        description: "Unique identifier for the record."
+        tests:
+          - not_null
+          - unique
+      - name: ppin
+        description: "School identification number."
+        tests:
+          - not_null
+      # Add other columns and tests as needed
+
+  - name: stg_public_school_locations
+    description: "Staging model for public school locations."
+    columns:
+      - name: objectid
+        description: "Unique identifier for the record."
+        tests:
+          - not_null
+          - unique
+      - name: ncessch
+        description: "School identification number."
+        tests:
+          - not_null
+      # Add other columns and tests as needed
+
+  - name: stg_school_district_boundaries
+    description: "Staging model for school district boundaries."
+    columns:
+      - name: objectid
+        description: "Object ID."
+        tests:
+          - not_null
+          - unique
+      - name: statefp
+        description: "State FIPS Code."
+        tests:
+          - not_null
+      # Add other columns and tests as needed
+
+  - name: stg_student_assessment_results
+    description: "Staging model for student assessment results."
+    columns:
+      - name: county_code
+        description: "County Code."
+        tests:
+          - not_null
+      - name: district_code
+        description: "District Code."
+        tests:
+          - not_null
+      - name: district_name
+        description: "District Name."
+      - name: school_code
+        description: "School Code."
+      - name: school_name
+        description: "School Name."
+      - name: type_id
+        description: "Type ID."
+      # Add other columns and tests as needed
+
+  - name: stg_district_funding
+    description: "Staging model for district funding data."
+    columns:
+      - name: svy_comp
+        description: "Survey Component."
+      - name: govtype
+        description: "Government Type."
+      - name: agg_desc_label
+        description: "Aggregation Description Label."
+      - name: agg_desc
+        description: "Aggregation Description."
+      - name: finsrc
+        description: "Funding Source."
+      - name: enrollsze
+        description: "Enrollment Size."
+      # Add other columns and tests as needed
+
+  - name: stg_esser_cares
+    description: "Staging model for ESSER Cares data."
+    columns:
+      - name: stateCode
+        description: "State Code."
+      - name: reportingYear
+        description: "Reporting Year."
+      - name: entityName
+        description: "Entity Name."
+      - name: dunsNumber
+        description: "DUNS Number."
+      - name: ueiNumber
+        description: "UEI Number."
+      - name: ncesNumber
+        description: "NCES Number."
+      - name: isLea
+        description: "Is LEA."
+      # Add other columns and tests as needed
+
+  - name: stg_esser_crrsa
+    description: "Staging model for ESSER CRRSA data."
+    columns:
+      - name: stateCode
+        description: "State Code."
+      - name: reportingYear
+        description: "Reporting Year."
+      - name: entityName
+        description: "Entity Name."
+      - name: dunsNumber
+        description: "DUNS Number."
+      - name: ueiNumber
+        description: "UEI Number."
+      - name: ncesNumber
+        description: "NCES Number."
+      - name: isLea
+        description: "Is LEA."
+      # Add other columns and tests as needed
+
+  - name: stg_esser_arp
+    description: "Staging model for ESSER ARP data."
+    columns:
+      - name: stateCode
+        description: "State Code."
+      - name: reportingYear
+        description: "Reporting Year."
+      - name: entityName
+        description: "Entity Name."
+      - name: dunsNumber
+        description: "DUNS Number."
+      - name: ueiNumber
+        description: "UEI Number."
+      - name: ncesNumber
+        description: "NCES Number."
+      - name: isLea
+        description: "Is LEA."
+      # Add other columns and tests as needed
+      
+
+  - name: stg_district_assessment_results
+    description: "Staging model for district assessment data."
+    columns:
+      - name: leaid
+        description: "LEA ID."
+      - name: leaid_num
+        description: "LEA ID Number."
+      - name: year
+        description: "Year."
+      - name: lea_name
+        description: "LEA Name."
+      - name: fips
+        description: "FIPS Code."
+      - name: grade_edfacts
+        description: "Grade EdFacts."
+      - name: race
+        description: "Race."
+      - name: sex
+        description: "Sex."
+      - name: lep
+        description: "Limited English Proficient (LEP)."
+      - name: homeless
+        description: "Homeless."
+      - name: migrant
+        description: "Migrant."
+      - name: disability
+        description: "Disability."
+      - name: foster_care
+        description: "Foster Care."
+      - name: military_connected
+        description: "Military Connected."
+      - name: econ_disadvantaged
+        description: "Economically Disadvantaged."
+      - name: read_test_num_valid
+        description: "Number of Valid Read Test Scores."
+      - name: read_test_pct_prof_low
+        description: "Percentage of Students Proficient or Above on Read Test (Low)."
+      - name: read_test_pct_prof_high
+        description: "Percentage of Students Proficient or Above on Read Test (High)."
+      - name: read_test_pct_prof_midpt
+        description: "Percentage of Students Proficient or Above on Read Test (Midpoint)."
+      - name: math_test_num_valid
+        description: "Number of Valid Math Test Scores."
+      - name: math_test_pct_prof_low
+        description: "Percentage of Students Proficient or Above on Math Test (Low)."
+      - name: math_test_pct_prof_high
+        description: "Percentage of Students Proficient or Above on Math Test (High)."
+      - name: math_test_pct_prof_midpt
+        description: "Percentage of Students Proficient or Above on Math Test (Midpoint)."
