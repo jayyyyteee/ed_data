@@ -77,6 +77,41 @@ def task_to_run2(api_url, table_name):
         logging.error(f"Task failed with error: {e}")
         raise
 
+def load_txt_file_to_postgres(file_path, table_name):
+    """
+    Load a text file into a PostgreSQL table.
+
+    Args:
+        file_path (str): Path to the text file.
+        table_name (str): The target database table name.
+    """
+    logging.info(f"Starting to process text file at {file_path}.")
+    try:
+        scripts_path = os.path.join(os.getenv('AIRFLOW_HOME', '/opt/airflow'), 'scripts')
+        if scripts_path not in os.sys.path:
+            os.sys.path.append(scripts_path)
+        
+        from fetch_and_load_data import load_data_to_postgres
+        import pandas as pd
+        # Read the text file into a DataFrame
+        df = pd.read_csv(file_path, sep='\t')
+
+        # Clean up data (optional: handle NaNs, data types, etc.)
+        # df = df.fillna(value=0)  # Replace NaN for SQL compatibility
+
+        # Convert DataFrame to a list of records
+        data = df.to_dict(orient='records')
+        column_names = df.columns.tolist()
+
+        # Log the first few rows for debugging
+        logging.info(f"First few rows of the text file:\n{df.head()}")
+
+        # Load data into PostgreSQL
+        load_data_to_postgres(data, column_names, table_name)
+
+        logging.info(f"Successfully loaded text file into table '{table_name}'.")
+    except Exception as e:
+        logging.error(f"Failed to process text file with error: {e}")
 
 def process_csv_file(csv_file_path, table_name):
     logging.info(f"Starting to process file {csv_file_path} for table {table_name}.")
@@ -142,7 +177,7 @@ def load_excel_data_task():
         raise
        
 # Define API URLs and table names
-
+#Documentation for district funding api https://api.census.gov/data/timeseries/govs/variables.html
 district_funding_api_url = (
     "https://api.census.gov/data/timeseries/govs?get=SVY_COMP,GOVTYPE,AGG_DESC_LABEL,AGG_DESC,FINSRC,ENROLLSZE,NAME,EXPENDTYPE,AMOUNT_PUPIL,AMOUNT,AMOUNT_CHANGE,YEAR&for=school%20district%20(unified):*&time=2022&key=307269891283336609036ec03b90a9576a660caa"
 )
@@ -189,8 +224,15 @@ assessment_results_file_path = '/opt/airflow/dags/scripts/data/sb_ca2024_1_csv_v
 assessment_results_table_name = 'student_assessment_results'      # Table name as defined in the SQL script
 assessment_api_url = "https://educationdata.urban.org/api/v1/school-districts/edfacts/assessments/2020/grade-99/"
 assessment_api_table_name = 'district_assessment_results' 
-# Create the task
+fundingdatadistrictnew = '/opt/airflow/dags/scripts/data/sdf22_1a.txt'
+fundingdatadistrictnew_table_name = 'district_funding_new' 
 
+run_fundingdatadistrictnew_script = PythonOperator(
+    task_id='run_fundingdatadistrictnew_script',
+    python_callable=load_txt_file_to_postgres,
+    op_args=[fundingdatadistrictnew, fundingdatadistrictnew_table_name],
+    dag=dag
+)
 
 
 run_district_assessment_script = PythonOperator(

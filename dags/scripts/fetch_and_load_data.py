@@ -140,7 +140,35 @@ def fetch_data_assessment_api(api_url):
     logging.info(f"Total records fetched from new API: {len(all_records)}")
     return all_records
 
+def load_txt_file_to_postgres(file_path, table_name):
+    """
+    Load a text file into a PostgreSQL table.
 
+    Args:
+        file_path (str): Path to the text file.
+        table_name (str): The target database table name.
+    """
+    logging.info(f"Starting to process text file at {file_path}.")
+    try:
+        # Read the text file into a DataFrame
+        df = pd.read_csv(file_path, sep=' ') 
+
+        # Clean up data (optional: handle NaNs, data types, etc.)
+        # df = df.fillna(value=0)  # Replace NaN for SQL compatibility
+
+        # Convert DataFrame to a list of records
+        data = df.to_dict(orient='records')
+        column_names = df.columns.tolist()
+
+        # Log the first few rows for debugging
+        logging.info(f"First few rows of the text file:\n{df.head()}")
+
+        # Load data into PostgreSQL
+        load_data_to_postgres(data, column_names, table_name)
+
+        logging.info(f"Successfully loaded text file into table '{table_name}'.")
+    except Exception as e:
+        logging.error(f"Failed to process text file with error: {e}")
 
 def load_excel_sheets_to_postgres(file_path, table_name_mapping):
     """
