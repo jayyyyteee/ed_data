@@ -70,6 +70,10 @@ This project provides a comprehensive stack for educational data analytics:
 
 3. **Build and start containers**
    ```bash
+   # First initialize Airflow
+   docker-compose up init-airflow
+   
+   # After successful initialization, start all services
    docker-compose up -d --build
    ```
 
