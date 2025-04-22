@@ -31,8 +31,6 @@ services:
             airflow db migrate &&
             airflow users create --username airflow --password password --firstname John --lastname Doe --role Admin --email admin@example.com"
 
-
-
   airflow-webserver:
     user: "${AIRFLOW_UID}:${AIRFLOW_GID}"
     build: .
@@ -87,6 +85,51 @@ services:
       - ./dbt_project:/opt/airflow/dbt_project
     command: scheduler
 
+  superset:
+    build:
+      context: .
+      dockerfile: Dockerfile.superset
+    container_name: superset
+    depends_on:
+      - postgres
+    environment:
+      - SUPERSET_SECRET_KEY=${SUPERSET_SECRET_KEY}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+    ports:
+      - "8088:8088"
+    volumes:
+      - ./superset_config.py:/app/superset/superset_config.py
+      - superset_home:/app/superset_home
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8088/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  superset-init:
+    build:
+      context: .
+      dockerfile: Dockerfile.superset
+    container_name: superset-init
+    depends_on:
+      - postgres
+      - superset
+    environment:
+      - SUPERSET_SECRET_KEY=${SUPERSET_SECRET_KEY}
+    volumes:
+      - ./superset_config.py:/app/superset/superset_config.py
+      - superset_home:/app/superset_home
+    command: >
+      bash -c "superset db upgrade &&
+               superset fab create-admin --username admin --firstname Admin --lastname User --email admin@example.com --password admin &&
+               superset init"
+    restart: on-failure
+
 volumes:
   postgres_data:
   airflow_logs:
+  superset_home:
