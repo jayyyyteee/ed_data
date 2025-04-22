@@ -49,20 +49,24 @@ This project provides a comprehensive stack for educational data analytics:
    AIRFLOW__CORE__LOAD_EXAMPLES=False
    AIRFLOW__WEBSERVER__DEFAULT_USER=admin
    AIRFLOW__WEBSERVER__DEFAULT_PASSWORD=password
-   AIRFLOW__WEBSERVER__SECRET_KEY=0b8bd2969e4a297edb6f1f9a60a19aa7
+   AIRFLOW__WEBSERVER__SECRET_KEY=YOUR_AIRFLOW_SECRET_KEY_HERE
 
    # dbt Configuration
    DBT_PROFILES_DIR=/opt/airflow/.dbt
 
    # Superset Configuration
-   SUPERSET_SECRET_KEY=YOUR_RANDOM_SECRET_KEY_HERE
+   SUPERSET_SECRET_KEY=YOUR_SUPERSET_SECRET_KEY_HERE
    ```
    
-   Generate a secure random key for Superset:
+   Generate secure random keys for both Airflow and Superset:
    ```bash
+   # For Airflow (32 bytes in hexadecimal)
+   openssl rand -hex 32
+   
+   # For Superset (42 bytes in base64)
    openssl rand -base64 42
    ```
-   Replace `YOUR_RANDOM_SECRET_KEY_HERE` with the generated key.
+   Replace `YOUR_AIRFLOW_SECRET_KEY_HERE` and `YOUR_SUPERSET_SECRET_KEY_HERE` with the respective generated keys.
 
 3. **Build and start containers**
    ```bash
