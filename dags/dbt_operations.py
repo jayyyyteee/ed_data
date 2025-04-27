@@ -17,7 +17,7 @@ default_args = {
 dag = DAG(
     'dbt_operations',
     default_args=default_args,
-    schedule_interval=None,  # Can be triggered manually or by ingestion DAG
+    schedule_interval=None, 
     catchup=False,
     description='Run dbt commands for data transformation and testing',
 )

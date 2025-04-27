@@ -22,7 +22,7 @@ default_args = {
 dag = DAG(
     'newfundingdata',
     default_args=default_args,
-    schedule_interval=None,  # Can be triggered manually or by ingestion DAG
+    schedule_interval=None, 
     catchup=False,
     description='Run new funding script for data transformation and testing',
 )

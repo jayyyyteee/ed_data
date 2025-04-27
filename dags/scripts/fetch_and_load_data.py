@@ -48,7 +48,7 @@ def fetch_data(api_url, max_record_count=2000):
             data = response.json()
 
             if "features" not in data or not data["features"]:
-                if not all_features:  # If no features at all have been fetched
+                if not all_features:  
                     raise ValueError("No features found in the API response")
                 break
 
@@ -58,7 +58,7 @@ def fetch_data(api_url, max_record_count=2000):
             logging.info(f"Fetched {records_fetched} records from the API.")
             
             if records_fetched < max_record_count:
-                break  # If less than max records, it means this was the last page
+                break  
 
             offset += max_record_count
 
@@ -89,7 +89,7 @@ def fetch_data_no_pagination(api_url):
     logging.info("Fetching data from API without pagination...")
     
     try:
-        response = requests.get(api_url, timeout=30)  # Adjust timeout as needed
+        response = requests.get(api_url, timeout=30)  
         response.raise_for_status()
         data = response.json()
 
@@ -153,8 +153,6 @@ def load_txt_file_to_postgres(file_path, table_name):
         # Read the text file into a DataFrame
         df = pd.read_csv(file_path, sep=' ') 
 
-        # Clean up data (optional: handle NaNs, data types, etc.)
-        # df = df.fillna(value=0)  # Replace NaN for SQL compatibility
 
         # Convert DataFrame to a list of records
         data = df.to_dict(orient='records')
@@ -188,8 +186,6 @@ def load_excel_sheets_to_postgres(file_path, table_name_mapping):
             # Read the sheet into a DataFrame
             df = excel_data.parse(sheet_name, dtype={'ncesNumber':str})
 
-            # Clean up data (optional: handle NaNs, data types, etc.)
-            # df = df.fillna(value=0)  # Replace NaN for SQL compatibility
 
             # Convert DataFrame to a list of records
             data = df.to_dict(orient='records')

@@ -159,7 +159,7 @@ def load_excel_data_task():
     logging.info("Starting to load Excel sheets into PostgreSQL tables.")
     try:
         # Path to the Excel file
-        excel_file_path = '/opt/airflow/dags/scripts/data/esser_data.xlsx'  # Update with your file path
+        excel_file_path = '/opt/airflow/dags/scripts/data/esser_data.xlsx'  
         table_name_mapping = {
             'cares': 'esser_cares',
             'crrsa': 'esser_crrsa',
@@ -219,9 +219,9 @@ public_schools_characteristics_api_url = (
     )
 public_schools_characteristics_table_name = "public_school_characteristics"
 
-# # Define the caret-delimited file path and table name
-assessment_results_file_path = '/opt/airflow/dags/scripts/data/sb_ca2024_1_csv_v1.txt'  # Replace with your actual file path
-assessment_results_table_name = 'student_assessment_results'      # Table name as defined in the SQL script
+
+assessment_results_file_path = '/opt/airflow/dags/scripts/data/sb_ca2024_1_csv_v1.txt'  
+assessment_results_table_name = 'student_assessment_results'    
 assessment_api_url = "https://educationdata.urban.org/api/v1/school-districts/edfacts/assessments/2020/grade-99/"
 assessment_api_table_name = 'district_assessment_results' 
 fundingdatadistrictnew = '/opt/airflow/dags/scripts/data/sdf22_1a.txt'
@@ -249,7 +249,7 @@ process_assessment_results_file = PythonOperator(
     dag=dag
 )
 
-# Create PythonOperators for each table
+
 
 run_school_district_funding = PythonOperator(
     task_id='run_fetch_and_load_district_funding',

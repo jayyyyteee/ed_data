@@ -103,7 +103,7 @@ def load_data_to_postgres(data, table_name="neighborhood_pov"):
             password=os.getenv("POSTGRES_PASSWORD"),
             host=os.getenv("POSTGRES_HOST"),
             port=os.getenv("POSTGRES_PORT"),
-            connect_timeout=10  # Ensure connection timeout
+            connect_timeout=10  
         )
         cur = conn.cursor()
 
